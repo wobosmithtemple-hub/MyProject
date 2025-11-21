@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gym App - Sign in / Login</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "poppins", sans-serif;
+    }
+    
+    body {
+      background-color: #000;
+      min-height: 100vh;
+    }
+    
+    .signin-container {
+      width: 100%;
+      height: 100vh;
+      background: #000;
+      color: #fff;
+      padding: 25px;
+    }
+    
+    .signin-container h2 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 30px;
+      color: #fff;
+      font-weight: 500;
+    }
+    
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s;
+    }
+    
+    input:focus {
+      border-color: #1e144f;
+    }
+    
+    .password-field {
+      position: relative;
+    }
+    
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      opacity: 0.7;
+    }
+    
+    .toggle-password:hover {
+      opacity: 1;
+    }
+    
+    .signup-btn {
+      width: 75%;
+      background-color: #00ff00;
+      color: #000;
+      font-weight: bold;
+      padding: 14px 0;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-left: 13%;
+      transition: 0.3s;
+    }
+    
+    .signup-btn:hover {
+      opacity: 0.9;
+    }
+    
+    .signin-container h3 {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 17px;
+      color: #fff;
+    }
+    
+    .signin-container a {
+      color: #00ff00;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div class="signin-container">
+    <h2>SIGN IN</h2>
+    
+    <form id="loginForm">
+      
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Your email address" required />
+      
+      <label for="password">Password</label>
+      <div class="password-field">
+        <input type="password" id="password" placeholder="***********" required />
+        <img src="/hide.jpg" class="toggle-password" data-input="password" alt="toggle">
+      </div>
+      
+      <p><input type="checkbox"> Remember Password</p>
+      
+      <button type="submit" class="signup-btn">Sign IN</button>
+      
+      <h3>Don't have an account? <a href="signup.html">Signup</a></h3>
+      
+    </form>
+  </div>
+  
+  <script>
+    // Password toggle
+    document.querySelectorAll(".toggle-password").forEach(icon => {
+      icon.addEventListener("click", () => {
+        const input = document.getElementById(icon.dataset.input);
+        if (input.type === "password") {
+          input.type = "text";
+          icon.src = "/see.jpg";
+        } else {
+          input.type = "password";
+          icon.src = "/hide.jpg";
+        }
+      });
+    });
+    
+    // LOGIN AUTHENTICATION
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+      
+      // FIXED: use the same key as signup
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      
+      const foundUser = users.find(u => u.email.toLowerCase() === email && u.password === password);
+      
+      if (!foundUser) {
+        alert("Incorrect email or password!");
+        return;
+      }
+      
+      // Store active user
+      localStorage.setItem("gym_active_user", JSON.stringify(foundUser));
+      
+      // Redirect to homepage
+      window.location.href = "homepage.html";
+    });
+  </script>
+  
+</body>
+
+</html>

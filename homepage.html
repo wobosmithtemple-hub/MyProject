@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gym App - Fixed</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    padding-bottom: 70px;
+  }
+
+  /* Common Sections */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* User Section */
+  .user-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+  }
+  .user-section img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .user-text .welcome { font-size: 14px; color: #aaa; }
+  .user-text .name { font-size: 18px; font-weight: bold; }
+
+  /* Banner */
+  .banner {
+    background: #f9c74f;
+    color: black;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px;
+    font-weight: bold;
+  }
+  .banner button {
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    margin-left: 15em;
+  }
+
+  /* Gym Cards */
+  .section-title { margin: 20px; font-size: 18px; font-weight: bold; }
+  .gym-card {
+    background: #222;
+    border-radius: 12px;
+    margin: 0 20px 20px 20px;
+    padding: 15px;
+  }
+  .gym-card img { width: 100%; border-radius: 10px; }
+  .gym-info { margin: 10px 0; text-align: center; }
+  .gym-info h3 { margin: 5px 0; }
+  .gym-info p { margin: 3px 0; font-size: 14px; color: #aaa; }
+  .rating { color: gold; font-size: 14px; font-weight: bold; }
+
+  .gym-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  .btn {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #00ff6a;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+    background: transparent;
+    color: #00ff6a;
+  }
+  .btn:hover { background: #00ff6a; color: black; }
+  .btn.save.saved { background: #00ff6a; color: #000; }
+
+  /* Explore Section */
+  #explore h1 { margin-left: 20px; margin-bottom: 10px; }
+  #explore-map { width: 95%; height: 300px; margin: 0 auto 20px auto; border-radius: 12px; display: block; }
+  #explore-search {
+    display: flex;
+    margin: 0 20px 10px 20px;
+  }
+  #explore-search input {
+    flex: 1;
+    padding: 10px 40px 10px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    background: url('/search.jpg') no-repeat right 10px center;
+    background-size: 24px 24px;
+  }
+
+  #recommended-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 1px;
+  }
+  #recommended-scroll .gym-card { flex: 0 0 250px; }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #222;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 90%;
+    margin-bottom: 1em;
+    border-radius: 4px;
+    left: 5%;
+  }
+  .bottom-nav a {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .bottom-nav a.active { color: #00ff6a; font-weight: bold; }
+  .bottom-nav img { width: 24px; height: 24px; object-fit: contain; }
+
+  /* Saved Page */
+  #savedPage { display: none; }
+
+  /* Gym Detail Page */
+  #gymDetailPage img { max-width: 90%; border-radius: 12px; display: block; margin: 0 auto; }
+
+/* New Profile Design (Matches Screenshot) */
+.profile-card-new {
+  background: #222;
+  margin: 20px;
+  padding: 25px 20px;
+  border-radius: 25px;
+  text-align: center;
+}
+
+.profile-img-new {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.edit-btn-new {
+  background: white;
+  border: none;
+  padding: 6px 18px;
+  font-size: 14px;
+  border-radius: 20px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.profile-name-new {
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.profile-email-new {
+  color: #bbb;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.options-card-new {
+  background: #222;
+  margin: 20px;
+  padding: 10px;
+  border-radius: 25px;
+}
+
+.option-row-new {
+  display: flex;
+  align-items: center;
+  padding: 18px 8px;
+  border-bottom: 1px solid #444;
+}
+
+.option-row-new:last-child {
+  border-bottom: none;
+}
+
+.icon-new {
+  width: 30px;
+  font-size: 20px;
+}
+
+.text-new {
+  flex: 1;
+  font-size: 16px;
+}
+
+.arrow-new {
+  font-size: 22px;
+  color: #ccc;
+}
+
+.logout-new .arrow-new {
+  color: red;
+}
+</style>
+</head>
+<body>
+
+<!-- Home Page -->
+<div id="homePage" class="section active">
+  <div class="user-section">
+    <img src="/image (2).jpg" alt="User">
+    <div class="user-text">
+      <div class="welcome">Welcome!</div>
+      <div class="name">Peace John</div>
+    </div>
+  </div>
+
+  <div class="banner">
+    Your fitness journey starts <br> with the perfect spot.
+    <br>
+    <button id="homeExploreBtn">Explore</button>
+  </div>
+
+  <div class="section-title">Recommended Gyms</div>
+
+  <div class="gym-card" data-name="Apex Performance">
+    <img src="/image (3).jpg" alt="Gym">
+    <div class="gym-info">
+      <h3>Apex Performance <span class="rating">⭐ 4.5</span></h3>
+      <p>📍 202 Birch Blvd, Port Harcourt</p>
+    </div>
+    <div class="gym-actions">
+      <div class="btn">More Info</div>
+      <div class="btn save">Save</div>
+    </div>
+  </div>
+
+  <div class="gym-card" data-name="PowerGym Downtown">
+    <img src="/image (4).jpg" alt="Gym">
+    <div class="gym-info">
+      <h3>PowerGym Downtown <span class="rating">⭐ 4.5</span></h3>
+      <p>📍 456 Strength St, City Center</p>
+    </div>
+    <div class="gym-actions">
+      <div class="btn">More Info</div>
+      <div class="btn save">Save</div>
+    </div>
+  </div>
+</div>
+
+<!-- Explore Page -->
+<div id="explore" class="section">
+  <h1>Gym Map</h1>
+  <iframe id="explore-map"
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.232!2d7.049!3d4.812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNCDCqM6w0YHRgtC-0YHRjCDQn9C-0YHQv9GD0Ywg0LrQuNC70LAg0JrQsNGG0LrQuNC60LAg0JTQvtC00LXQvdC40YbQtdC80YvQuSDQv9GA0L7Qu9C40YbQuA!5e0!3m2!1sen!2sng!4v1699999999999"
+    allowfullscreen="" loading="lazy"></iframe>
+
+  <div id="explore-search">
+    <input type="text" placeholder="Search nearby gym">
+  </div>
+
+  <div class="section-title">Recommended Gyms</div>
+  <div id="recommended-scroll">
+    <div class="gym-card" data-name="Apex Performance">
+      <img src="/image (5).jpg" alt="Gym">
+      <div class="gym-info">
+        <h3> 202 Birch Blvd, <br />Port Harcourt</h3>
+      </div>
+    </div>
+    <div class="gym-card" data-name="PowerGym Downtown">
+      <img src="/image(6).jpg" alt="Gym">
+      <div class="gym-info">
+        <h3> 456 Strength St,<br /> City Center</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Saved Page -->
+<div id="savedPage">
+  <div class="section-title">Saved Gyms</div>
+  <div id="savedList"></div>
+</div>
+
+<!-- Gym Detail Page -->
+<div id="gymDetailPage" class="section">
+  <div class="section-title" id="gymDetailTitle">Gym Name</div>
+  <img id="gymDetailImg" src="" alt="Gym">
+  <p id="gymDetailAddress" style="text-align:center; color:#aaa; margin-bottom:10px;">Address here</p>
+  <p id="gymDetailRating" style="text-align:center; color:gold; font-weight:bold;">⭐ 0.0</p>
+  <p id="gymDetailDesc" style="padding:0 20px; text-align:center; color:#ccc;">
+    Gym full description goes here. You can add opening hours, facilities, trainers, and more details.
+  </p>
+  <div style="text-align:center; margin-top:15px;">
+    <button id="gymDetailBackBtn" class="btn" style="width:120px;">Back</button>
+  </div>
+</div>
+
+<!-- Profile Page -->
+<div id="profilePage" class="section">
+  <h2 style="text-align:center; margin-top:20px;">My Profile</h2>
+  
+  <!-- Top Profile Card -->
+  <div class="profile-card-new">
+    <img src="/image (2).jpg" class="profile-img-new" alt="User">
+    
+    <button class="edit-btn-new">✏️ Edit</button>
+    
+    <h3 class="profile-name-new" id="profileName">Peace John</h3>
+    <p class="profile-email-new" id="profileEmail">peacejo****@gmail.com</p>
+  </div>
+  
+  <!-- Options List -->
+  <div class="options-card-new">
+    
+    <div class="option-row-new">
+      <span class="icon-new">⚙️</span>
+      <span class="text-new">Settings</span>
+      <span class="arrow-new">›</span>
+    </div>
+    
+    <div class="option-row-new">
+      <span class="icon-new">💳</span>
+      <span class="text-new">Transaction History</span>
+      <span class="arrow-new">›</span>
+    </div>
+    
+    <div class="option-row-new">
+      <span class="icon-new">❓</span>
+      <span class="text-new">Help</span>
+      <span class="arrow-new">›</span>
+    </div>
+    
+    <div class="option-row-new logout-new">
+      <span class="icon-new" style="color:red;">↪️</span>
+      <span class="text-new" style="color:red;">Logout</span>
+      <span class="arrow-new" style="color:red;">›</span>
+    </div>
+    
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <a id="homeBtn" class="active"><img src="/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png" alt="logo1" /><br>Home</a>
+  <a id="exploreBtn"><img src="/search_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png" alt="logo2" /><br>Explore</a>
+  <a id="savedBtn"><img src="/bookmark_check_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png" alt="logo3" /><br>Saved</a>
+  <a id="profileBtn"><img src="/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png" alt="logo4" /><br>Profile</a>
+</div>
+
+<script>
+let savedGyms = [];
+
+const homePage = document.getElementById("homePage");
+const explorePage = document.getElementById("explore");
+const savedPage = document.getElementById("savedPage");
+const gymDetailPage = document.getElementById("gymDetailPage");
+const profilePage = document.getElementById("profilePage");
+
+const gymDetailTitle = document.getElementById("gymDetailTitle");
+const gymDetailImg = document.getElementById("gymDetailImg");
+const gymDetailAddress = document.getElementById("gymDetailAddress");
+const gymDetailRating = document.getElementById("gymDetailRating");
+const gymDetailDesc = document.getElementById("gymDetailDesc");
+const gymDetailBackBtn = document.getElementById("gymDetailBackBtn");
+
+// Bottom nav buttons
+document.getElementById("homeBtn").addEventListener("click", ()=>{
+  homePage.style.display="block";
+  explorePage.style.display="none";
+  savedPage.style.display="none";
+  gymDetailPage.style.display="none";
+  profilePage.style.display="none";
+  setActive("homeBtn");
+});
+document.getElementById("exploreBtn").addEventListener("click", ()=>{
+  homePage.style.display="none";
+  explorePage.style.display="block";
+  savedPage.style.display="none";
+  gymDetailPage.style.display="none";
+  profilePage.style.display="none";
+  setActive("exploreBtn");
+});
+document.getElementById("savedBtn").addEventListener("click", ()=>{
+  homePage.style.display="none";
+  explorePage.style.display="none";
+  savedPage.style.display="block";
+  gymDetailPage.style.display="none";
+  profilePage.style.display="none";
+  renderSavedGyms();
+  setActive("savedBtn");
+});
+document.getElementById("profileBtn").addEventListener("click", ()=>{
+  homePage.style.display="none";
+  explorePage.style.display="none";
+  savedPage.style.display="none";
+  gymDetailPage.style.display="none";
+  profilePage.style.display="block";
+  setActive("profileBtn");
+});
+
+// Home Banner Explore button
+document.getElementById("homeExploreBtn").addEventListener("click", ()=>{
+  homePage.style.display="none";
+  explorePage.style.display="block";
+  savedPage.style.display="none";
+  gymDetailPage.style.display="none";
+  profilePage.style.display="none";
+  setActive("exploreBtn");
+});
+
+function setActive(id){
+  document.querySelectorAll(".bottom-nav a").forEach(a=>a.classList.remove("active"));
+  if(id) document.getElementById(id).classList.add("active");
+}
+
+// Save/Unsave buttons
+function setupSaveButtons(){
+  document.querySelectorAll(".btn.save").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const card = btn.closest(".gym-card");
+      const gymName = card.getAttribute("data-name") || card.querySelector("h3").innerText;
+      const idx = savedGyms.indexOf(gymName);
+      if(idx===-1){
+        savedGyms.push(gymName);
+        btn.innerText="Saved ✓";
+        btn.style.background="#00ff6a";
+        btn.style.color="#000";
+      } else {
+        savedGyms.splice(idx,1);
+        btn.innerText="Save";
+        btn.style.background="";
+        btn.style.color="#00ff6a";
+      }
+      renderSavedGyms();
+    });
+  });
+}
+
+// Render Saved Gyms
+function renderSavedGyms(){
+  const savedContainer = document.getElementById("savedList");
+  savedContainer.innerHTML="";
+  if(savedGyms.length===0){
+    savedContainer.innerHTML="<p style='margin:20px;'>No saved gyms yet.</p>";
+    return;
+  }
+  savedGyms.forEach(name=>{
+    const original = Array.from(document.querySelectorAll(".gym-card")).find(c=>c.getAttribute("data-name")===name);
+    if(original){
+      const clone = original.cloneNode(true);
+      const saveBtn = clone.querySelector(".btn.save");
+      saveBtn.classList.add("saved");
+      saveBtn.innerText="Saved ✓";
+      saveBtn.addEventListener("click", ()=>{
+        savedGyms = savedGyms.filter(n=>n!==name);
+        renderSavedGyms();
+        setupSaveButtons();
+      });
+      savedContainer.appendChild(clone);
+    }
+  });
+}
+
+setupSaveButtons();
+
+// More Info buttons
+document.querySelectorAll(".gym-card .btn").forEach(btn => {
+  if(btn.innerText === "More Info"){
+    btn.addEventListener("click", ()=>{
+      const card = btn.closest(".gym-card");
+      const name = card.querySelector("h3").innerText.split("⭐")[0].trim();
+      const img = card.querySelector("img").src;
+      const address = card.querySelector("p").innerText;
+      const rating = card.querySelector(".rating").innerText;
+
+      gymDetailTitle.innerText = name;
+      gymDetailImg.src = img;
+      gymDetailAddress.innerText = address;
+      gymDetailRating.innerText = rating;
+      gymDetailDesc.innerText = "This is the full details of " + name + ". You can include gym facilities, trainers, timings, and more here.";
+
+      homePage.style.display = "none";
+      explorePage.style.display = "none";
+      savedPage.style.display = "none";
+      gymDetailPage.style.display = "block";
+      profilePage.style.display="none";
+      setActive("");
+    });
+  }
+});
+
+// Back button from Gym Detail
+gymDetailBackBtn.addEventListener("click", ()=>{
+  gymDetailPage.style.display = "none";
+  homePage.style.display = "block";
+  profilePage.style.display="none";
+  setActive("homeBtn");
+});
+
+// Logout button example
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+  alert("Logging out...");
+  // You can add real logout logic here
+});
+</script>
+</body>
+</html>

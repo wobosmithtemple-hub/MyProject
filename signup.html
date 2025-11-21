@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym App - Sign Up</title>
+
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "poppins", sans-serif;
+    }
+
+    body {
+      background-color: #000;
+      min-height: 100vh;
+    }
+
+    .signup-container {
+      width: 100%;
+      height: 100vh;
+      background: #333;
+      color: #fff;
+      padding: 25px;
+    }
+    
+    .signup-container h2 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 30px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    label {
+      font-size: 14px;
+      margin-bottom: 5px;
+      display: block;
+      color: #fff;
+    }
+    
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s;
+    }
+    
+    input:focus {
+      border-color: #1e144f;
+    }
+    
+    .password-field {
+      position: relative;
+    }
+    
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      width: 22px;
+      height: 22px;
+      opacity: 0.7;
+    }
+
+    .toggle-password:hover {
+      opacity: 1;
+    }
+    
+    .signup-btn {
+      width: 75%;
+      background-color: #00ff00;
+      color: #000;
+      font-weight: bold;
+      padding: 14px 0;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-left: 13%;
+      transition: 0.3s;
+    }
+    
+    .signup-btn:hover {
+      opacity: 0.9;
+    }
+    
+    .signin-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #fff;
+    }
+    
+    .signin-text p {
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .btn-text{
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+    
+    .signup1-btn {
+      width: 48%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 10px 0;
+      border: none;
+      border-radius: 25px;
+      font-size: 19px;
+      cursor: pointer;
+    }
+
+    #sign-in{
+      color: #00ff00;
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="signup-container">
+    <h2>SIGN UP</h2>
+    
+    <form id="signup-form">
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Your email address" required />
+      
+      <label for="password">Password</label>
+      <div class="password-field">
+        <input type="password" id="password" placeholder="***********" required />
+        <img src="/hide.jpg" class="toggle-password" data-input="password" alt="toggle">
+      </div>
+      
+      <label for="confirmPassword">Confirm Password</label>
+      <div class="password-field">
+        <input type="password" id="confirmPassword" placeholder="***********" required />
+        <img src="/hide.jpg" class="toggle-password" data-input="confirmPassword" alt="toggle">
+      </div>
+      
+      <button type="submit" class="signup-btn">Sign Up</button>
+      
+      <div class="signin-text">
+        <p>Or Sign Up With</p>
+
+        <div class="btn-text">
+          <button type="button" class="signup1-btn">Google</button>
+          <button type="button" class="signup1-btn">Facebook</button>
+        </div>
+
+        <h3>Already a user? <span id="sign-in">Sign in</span></h3>
+      </div>
+      
+    </form>
+  </div>
+
+  <script>
+    // =====================
+    // PASSWORD TOGGLE
+    // =====================
+    document.querySelectorAll(".toggle-password").forEach(icon => {
+      icon.addEventListener("click", () => {
+        const inputId = icon.getAttribute("data-input");
+        const input = document.getElementById(inputId);
+
+        if (input.type === "password") {
+          input.type = "text";
+          icon.src = "/see.jpg";
+        } else {
+          input.type = "password";
+          icon.src = "/hide.jpg";
+        }
+      });
+    });
+
+    // =====================
+    // SIGN UP AUTHENTICATION
+    // =====================
+    document.getElementById("signup-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      let email = document.getElementById("email").value.trim();
+      let password = document.getElementById("password").value;
+      let confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (!email || !password || !confirmPassword) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      if (!email.includes("@") || !email.includes(".")) {
+        alert("Enter a valid email");
+        return;
+      }
+
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      // Check for duplicate email
+      let exists = users.find(user => user.email === email);
+      if (exists) {
+        alert("Email already registered! Please sign in.");
+        return;
+      }
+
+      // Save User
+      users.push({
+        email: email,
+        password: password
+      });
+
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Account created successfully!");
+
+      // redirect to login page (your gym app sign-in)
+      window.location.href = "signin.html";
+    });
+
+    // Redirect to sign in page
+    document.getElementById("sign-in").addEventListener("click", () => {
+      window.location.href = "signin.html"; 
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym App - Onboarding 3</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+     background-image: url("/image (1).jpg");
+     background-size: cover;
+     background-position: center;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      /*backdrop-filter: blur(1px);*/
+    }
+
+    .container {
+      max-width: 350px;
+      width: 100%;
+      text-decoration: none;
+      animation: fadeUp 1s ease-in-out;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 5em;
+    }
+
+    p {
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 2em;
+    }
+    
+    a{
+      text-decoration: none;
+    }
+
+   .role-btn {
+      display: block;
+      width: 95%;
+      padding: 35px 30px 35px;
+      margin: 0 auto;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .role-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #ff6b6b;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>REGISTER AS</h1>
+    <p>Choose Your Role To Get Started</p>
+    <a href="signup.html"><button class="role-btn">Gym Enthusiast</button></a>
+    <a href="signup.html"><button class="role-btn">Gym Center</button></a>
+  </div>
+</body>
+</html>
